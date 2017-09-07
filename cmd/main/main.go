@@ -3,7 +3,10 @@ package main
 import (
 	"log"
 
+	"time"
+
 	"github.com/shimokp/takizawa-garbage-bot/manager"
+	"github.com/shimokp/takizawa-garbage-bot/model"
 )
 
 func main() {
@@ -19,7 +22,7 @@ func main() {
 	//	panic(err)
 	//}
 
-	log.Println(manager.GetInstance())
+	log.Println(manager.GetGarbageName(time.Now(), model.A))
 
 	log.Println("SUCCEEDED")
 }
