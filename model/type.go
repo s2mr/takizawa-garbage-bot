@@ -12,7 +12,7 @@ const (
 // ゴミの種類
 type GarbageType int
 
-// Region
+// GarbageType
 const (
 	Normal GarbageType = iota
 	Metal
@@ -20,4 +20,12 @@ const (
 	PET
 	News
 	Medium
+	Holiday
+	Unknown
 )
+
+//TODO: rename
+type Hoge struct {
+	Month  int
+	Day    int
+}

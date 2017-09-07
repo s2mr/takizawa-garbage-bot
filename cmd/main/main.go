@@ -22,7 +22,6 @@ func main() {
 	//	panic(err)
 	//}
 
-	log.Println(manager.GetGarbageName(time.Now(), model.A))
-
+	log.Println(manager.GetGarbageName(time.Date(2017, 1, 3, 0, 0, 0, 0, &time.Location{}), model.A))
 	log.Println("SUCCEEDED")
 }
