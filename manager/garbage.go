@@ -1,6 +1,7 @@
 package manager
 
 import (
+	"log"
 	"time"
 
 	"github.com/shimokp/takizawa-garbage-bot/constant"
@@ -68,10 +69,10 @@ func getGarbageForA(date time.Time) model.GarbageType {
 	switch date.Weekday() {
 	case time.Monday:
 		return model.Normal
-	case time.Thursday:
-		return model.Normal
 	case time.Wednesday:
 		return model.Metal
+	case time.Thursday:
+		return model.Normal
 	}
 
 	//隔週のやつがどっちかを判定
@@ -79,7 +80,27 @@ func getGarbageForA(date time.Time) model.GarbageType {
 }
 
 func getGarbageForB(date time.Time) model.GarbageType {
-	return model.Unknown
+	if date.Weekday() == time.Sunday || date.Weekday() == time.Saturday {
+		return model.Holiday
+	}
+
+	//休みの日かどうかを判定
+	if isHoliday(date, model.B) {
+		return model.Holiday
+	}
+
+	//隔週じゃないやつは返す
+	switch date.Weekday() {
+	case time.Monday:
+		return model.Metal
+	case time.Tuesday:
+		return model.Normal
+	case time.Friday:
+		return model.Normal
+	}
+
+	//隔週のやつがどっちかを判定
+	return getGarbageBiweeklyForB(date)
 }
 
 func isHoliday(date time.Time, region model.Region) bool {
@@ -117,6 +138,30 @@ func getGarbageBiweeklyForA(date time.Time) model.GarbageType {
 			return constant.BiweeklyFridayStartGarbageForA
 		} else {
 			return constant.BiweeklyFridaySecondGarbageForA
+		}
+	}
+	return model.Unknown
+}
+
+func getGarbageBiweeklyForB(date time.Time) model.GarbageType {
+	switch date.Weekday() {
+	case time.Wednesday:
+		duration := date.Sub(constant.BiweeklyWednesdayStartDateForB)
+		days := int(duration.Hours()) / 24
+		if days%2 == 0 {
+			//FIXME: 曜日に依存しない変数名
+			return constant.BiweeklyWednesdayStartGarbageForB
+		} else {
+			return constant.BiweeklyWednesdaySecondGarbageForB
+		}
+	case time.Thursday:
+		duration := date.Sub(constant.BiweeklyThursdayStartDateForB)
+		days := int(duration.Hours()) / 24
+		if days%2 == 0 {
+			return constant.BiweeklyThursdayStartGarbageForB
+		} else {
+			log.Println("CALL")
+			return constant.BiweeklyThursdaySecondGarbageForB
 		}
 	}
 	return model.Unknown

@@ -24,6 +24,13 @@ var BiweeklyFridaySecondGarbageForA = model.Glass
 var BiweeklyTuesdayStartDateForA = time.Date(2017, 4, 4, 0, 0, 0, 0, &time.Location{})
 var BiweeklyFridayStartDateForA = time.Date(2017, 4, 7, 0, 0, 0, 0, &time.Location{})
 
+var BiweeklyWednesdayStartGarbageForB = model.Glass
+var BiweeklyWednesdaySecondGarbageForB = model.PET
+var BiweeklyThursdayStartGarbageForB = model.News
+var BiweeklyThursdaySecondGarbageForB = model.Medium
+var BiweeklyWednesdayStartDateForB = time.Date(2017, 4, 5, 0, 0, 0, 0, &time.Location{})
+var BiweeklyThursdayStartDateForB = time.Date(2017, 4, 6, 0, 0, 0, 0, &time.Location{})
+
 var HolidaysForA = []model.Hoge{
 	{5, 3},
 	{5, 5},
