@@ -1,1 +1,1 @@
-web: takizawa-garbage-bot
+web: go run cmd/main/main.go $PORT

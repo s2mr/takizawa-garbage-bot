@@ -1,6 +1,8 @@
 package tgb
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/shimokp/takizawa-garbage-bot/controller"
 )
@@ -8,5 +10,6 @@ import (
 func Init() {
 	r := gin.Default()
 	r.GET("/callback", controller.CallbackHandler)
-	r.Run("localhost:80") // listen and serve on 0.0.0.0:8080
+	port := os.Args[1]
+	r.Run("localhost:" + port) // listen and serve on 0.0.0.0:8080
 }
