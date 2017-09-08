@@ -1,1 +1,1 @@
-web: main
+web: takizawa-garbage-bot
