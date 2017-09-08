@@ -21,7 +21,9 @@ func CallbackHandler(c *gin.Context) {
 	defer c.Request.Body.Close()
 	text := bufbody.String()
 	log.Println(text)
-	body := strings.NewReader(`{"text":"` + text + `"}`)
+
+	body := strings.NewReader(`{"text":` + text + `}`)
+
 	url := os.Getenv("SlackToMe")
 	req, err := http.NewRequest("POST", url, body)
 	if err != nil {
