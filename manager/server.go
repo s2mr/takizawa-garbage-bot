@@ -1,4 +1,4 @@
-package tgb
+package manager
 
 import (
 	"os"

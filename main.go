@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/shimokp/takizawa-garbage-bot"
-)
+import "github.com/shimokp/takizawa-garbage-bot/manager"
 
 func main() {
 	//bot, err := linebot.New(secret.CHANNEL_SECRET, secret.CH ®NNEL_ACCESS_TOKEN)
@@ -17,7 +15,7 @@ func main() {
 	//	panic(err)
 	//}
 
-	tgb.Init()
+	manager.Init()
 
 	//log.Println(manager.GetMessage(model.Tomorrow, model.B))
 	//log.Println("SUCCEEDED")
