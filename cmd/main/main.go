@@ -1,10 +1,7 @@
 package main
 
 import (
-	"log"
-
-	"github.com/shimokp/takizawa-garbage-bot/manager"
-	"github.com/shimokp/takizawa-garbage-bot/model"
+	"github.com/shimokp/takizawa-garbage-bot"
 )
 
 func main() {
@@ -20,9 +17,10 @@ func main() {
 	//	panic(err)
 	//}
 
-	log.Println(manager.GetMessage(model.Tomorrow, model.B))
-	log.Println("SUCCEEDED")
+	tgb.Init()
 
+	//log.Println(manager.GetMessage(model.Tomorrow, model.B))
+	//log.Println("SUCCEEDED")
 	//log.Println(manager.GetGarbageName(time.Date(2018, 2, 7, 0, 0, 0, 0, &time.Location{}), model.B))
 	//log.Println("SUCCEEDED")
 }
