@@ -1,7 +1,6 @@
 package manager
 
 import (
-	"log"
 	"time"
 
 	"github.com/shimokp/takizawa-garbage-bot/constant"
@@ -174,7 +173,6 @@ func getGarbageBiweeklyForB(date time.Time) model.GarbageType {
 		if days%2 == 0 {
 			return constant.BiweeklyThursdayStartGarbageForB
 		} else {
-			log.Println("CALL")
 			return constant.BiweeklyThursdaySecondGarbageForB
 		}
 	}
