@@ -1,11 +1,20 @@
 package model
 
+//指定日時
+type DateType int
+
+//DateType
+const (
+	Today DateType = iota + 1
+	Tomorrow
+)
+
 // ゴミ出しの地区
 type Region int
 
 // Region
 const (
-	A Region = iota
+	A Region = iota + 1
 	B
 )
 
@@ -14,7 +23,7 @@ type GarbageType int
 
 // GarbageType
 const (
-	Normal GarbageType = iota
+	Normal GarbageType = iota + 1
 	Metal
 	Glass
 	PET
@@ -26,6 +35,6 @@ const (
 
 //TODO: rename
 type Hoge struct {
-	Month  int
-	Day    int
+	Month int
+	Day   int
 }

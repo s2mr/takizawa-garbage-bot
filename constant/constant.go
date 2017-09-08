@@ -15,7 +15,9 @@ const GARBAGE_NAME_MEDIUM = "中型ごみ"
 const GARBAGE_NAME_HOLIDAY = "休み"
 const GARBAGE_NAME_UNKNOWN = "不明"
 
-const GARBAGE_NAME_SUFFIX = "の日"
+const MESSAGE_PREFFIX_TODAY = "今日は"
+const MESSAGE_PREFFIX_TOMORROW = "明日は"
+const MESSAGE_SUFFIX = "の日です。"
 
 var BiweeklyTuesdayStartGarbageForA = model.Medium
 var BiweeklyTuesdaySecondGarbageForA = model.News

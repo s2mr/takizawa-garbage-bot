@@ -23,12 +23,26 @@ func GetInstance() *GarbageManager {
 	return sharedInstance
 }
 
-func GetGarbageName(date time.Time, region model.Region) string {
+func GetMessage(dateType model.DateType, region model.Region) string {
+	var message string
+
+	switch dateType {
+	case model.Today:
+		message = constant.MESSAGE_PREFFIX_TODAY + getGarbageName(time.Now(), region)
+	case model.Tomorrow:
+		tomorrow := time.Now().AddDate(0, 0, 1)
+		message = constant.MESSAGE_PREFFIX_TOMORROW + getGarbageName(tomorrow, region)
+	}
+
+	return message + constant.MESSAGE_SUFFIX
+}
+
+func getGarbageName(date time.Time, region model.Region) string {
 	switch region {
 	case model.A:
-		return garbageTypeToString(getGarbageForA(date)) + constant.GARBAGE_NAME_SUFFIX
+		return garbageTypeToString(getGarbageForA(date))
 	case model.B:
-		return garbageTypeToString(getGarbageForB(date)) + constant.GARBAGE_NAME_SUFFIX
+		return garbageTypeToString(getGarbageForB(date))
 	default:
 		return constant.GARBAGE_NAME_UNKNOWN
 	}
