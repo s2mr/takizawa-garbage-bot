@@ -11,5 +11,5 @@ func Init() {
 	r := gin.Default()
 	r.GET("/callback", controller.CallbackHandler)
 	port := os.Getenv("PORT")
-	r.Run("localhost:" + port) // listen and serve on 0.0.0.0:8080
+	r.Run(":" + port) // listen and serve on 0.0.0.0:8080
 }
