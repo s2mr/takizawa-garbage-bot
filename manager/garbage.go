@@ -11,15 +11,15 @@ type GarbageManager struct {
 	// Some fields
 }
 
-var sharedInstance *GarbageManager = newGarbageManager()
+var sharedGarbageManagerInstance *GarbageManager = newGarbageManager()
 
 func newGarbageManager() *GarbageManager {
 	// 何かしらの初期化処理
 	return &GarbageManager{ /* 初期化 */ }
 }
 
-func GetInstance() *GarbageManager {
-	return sharedInstance
+func GetGarbageManagerInstance() *GarbageManager {
+	return sharedGarbageManagerInstance
 }
 
 func GetMessage(dateType model.DateType, region model.Region) string {

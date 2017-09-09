@@ -1,4 +1,4 @@
-package config_manager
+package config
 
 import "os"
 

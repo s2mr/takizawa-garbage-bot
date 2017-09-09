@@ -10,11 +10,14 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/line/line-bot-sdk-go/linebot"
+	"github.com/pkg/errors"
+	"github.com/shimokp/takizawa-garbage-bot/manager/config"
 	"github.com/shimokp/takizawa-garbage-bot/model"
 )
 
 func CallbackHandler(c *gin.Context) {
-	var resp = "ok"
+	var resp = ""
 
 	bufBody := new(bytes.Buffer)
 	bufBody.ReadFrom(c.Request.Body)
@@ -25,13 +28,19 @@ func CallbackHandler(c *gin.Context) {
 	err := json.Unmarshal(bufBody.Bytes(), &message)
 	if err != nil {
 		log.Println(err)
-		resp = err.Error()
+		addString(&resp, err.Error())
 	}
 
 	err = sendToSlack(message)
 	if err != nil {
 		log.Println(err)
-		resp = resp + err.Error()
+		addString(&resp, err.Error())
+	}
+
+	err = returnMessage(message)
+	if err != nil {
+		log.Println(err)
+		addString(&resp, err.Error())
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -39,12 +48,34 @@ func CallbackHandler(c *gin.Context) {
 	})
 }
 
+// TODO: ちゃんと動いてる？
+func addString(base *string, text string) {
+	*base = *base + "\n" + text
+}
+
+func returnMessage(message model.MessageText) error {
+	if len(message.Events) == 0 {
+		return errors.New("out of range")
+	}
+	event := message.Events[0]
+
+	bot, err := linebot.New(config.GetInstance().TGB_CHANNEL_SECRET, config.GetInstance().TGB_CHANNEL_ACCESS_TOKEN)
+	if err != nil {
+		return err
+	}
+	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("リプライ！")).Do(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func sendToSlack(message model.MessageText) error {
 
 	s := fmt.Sprintf(`
 	{ 	"text" : " `+
 		" ``` "+
-		`replayToken: %s
+		`replyToken: %s
 type: %s
 timeStamp: %s
 ---Source---
