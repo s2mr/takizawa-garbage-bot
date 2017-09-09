@@ -1,17 +1,13 @@
 package controller
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
-	"strings"
-
-	"bytes"
-
 	"os"
-
-	"encoding/json"
-
-	"fmt"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shimokp/takizawa-garbage-bot/model"
@@ -26,8 +22,23 @@ func CallbackHandler(c *gin.Context) {
 	defer c.Request.Body.Close()
 	log.Println(bufbody.String())
 
+	var resp = "ok"
+	err := sendToSlack(*bufbody)
+	if err != nil {
+		resp = err.Error()
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": resp,
+	})
+}
+
+func sendToSlack(bufbody bytes.Buffer) error {
 	var message = model.MessageText{}
-	json.Unmarshal(bufbody.Bytes(), &message)
+	err := json.Unmarshal(bufbody.Bytes(), &message)
+	if err != nil {
+		return err
+	}
 
 	s := fmt.Sprintf(`
 	{ 	"text" : " `+
@@ -57,21 +68,21 @@ text: %s`+
 	log.Println("URL: ", url)
 	req, err := http.NewRequest("POST", url, body)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 	log.Println("Slack Responce Status: ", resp.Status)
 
-	bufbody.ReadFrom(resp.Body)
+	_, err = bufbody.ReadFrom(resp.Body)
+	if err != nil {
+		return err
+	}
 	log.Println("Slack Responce: ", bufbody.String())
 	defer resp.Body.Close()
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": s,
-	})
+	return nil
 }
