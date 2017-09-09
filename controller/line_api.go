@@ -11,7 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/linebot"
-	"github.com/pkg/errors"
+	"github.com/shimokp/takizawa-garbage-bot/manager"
 	"github.com/shimokp/takizawa-garbage-bot/manager/config"
 	"github.com/shimokp/takizawa-garbage-bot/model"
 )
@@ -31,16 +31,21 @@ func CallbackHandler(c *gin.Context) {
 		addString(&resp, err.Error())
 	}
 
-	err = sendToSlack(message)
-	if err != nil {
-		log.Println(err)
-		addString(&resp, err.Error())
-	}
+	//TODO: 一個でもエラーが出たら連鎖していろんなifに引っかかりそう
+	if len(message.Events) > 0 {
+		event := message.Events[0]
 
-	err = returnMessage(message)
-	if err != nil {
-		log.Println(err)
-		addString(&resp, err.Error())
+		err = sendToSlack(event)
+		if err != nil {
+			log.Println(err)
+			addString(&resp, err.Error())
+		}
+
+		err = replyMessage(event)
+		if err != nil {
+			log.Println(err)
+			addString(&resp, err.Error())
+		}
 	}
 
 	log.Println("RESP::", resp)
@@ -50,34 +55,36 @@ func CallbackHandler(c *gin.Context) {
 	})
 }
 
-// TODO: ちゃんと動いてる？？
 func addString(base *string, text string) {
 	*base = *base + "\n" + text
 }
 
-func returnMessage(message model.MessageText) error {
-	if len(message.Events) == 0 {
-		return errors.New("nothing event")
-	}
-	event := message.Events[0]
+func replyMessage(event model.Event) error {
+	sendMessage := switchMessage(event)
 
 	bot, err := linebot.New(config.GetInstance().TGB_CHANNEL_SECRET, config.GetInstance().TGB_CHANNEL_ACCESS_TOKEN)
 	if err != nil {
 		return err
 	}
-	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("リプライ！")).Do(); err != nil {
+	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(sendMessage)).Do(); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func sendToSlack(message model.MessageText) error {
-	if len(message.Events) == 0 {
-		return errors.New("nothing message")
+func switchMessage(event model.Event) string {
+	switch event.Message.Text {
+	case "今日":
+		return manager.GetMessage(model.Today, model.A)
+	case "明日":
+		return manager.GetMessage(model.Tomorrow, model.A)
 	}
 
-	event := message.Events[0]
+	return ""
+}
+
+func sendToSlack(event model.Event) error {
 	s := fmt.Sprintf(`
 	{ 	"text" : " `+
 		" ``` "+
