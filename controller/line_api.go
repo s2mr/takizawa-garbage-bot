@@ -48,7 +48,7 @@ func CallbackHandler(c *gin.Context) {
 	})
 }
 
-// TODO: ちゃんと動いてる？
+// TODO: ちゃんと動いてる？？
 func addString(base *string, text string) {
 	*base = *base + "\n" + text
 }
