@@ -29,7 +29,27 @@ func CallbackHandler(c *gin.Context) {
 	var message = model.MessageText{}
 	json.Unmarshal(bufbody.Bytes(), &message)
 
-	s := fmt.Sprintf("{\"text\" : \" ``` %s ``` \"}", message)
+	s := fmt.Sprintf(`
+	{ 	"text" : " `+
+		" ``` "+
+		`replayToken: %s
+type: %s
+timeStamp: %s
+---Source---
+type: %s
+userId: %s
+iD: %s
+---Message---
+type: %s
+text: %s`+
+		" ``` "+` "}`, message.Events[0].ReplyToken,
+		message.Events[0].Type,
+		message.Events[0].Timestamp,
+		message.Events[0].Source.Type,
+		message.Events[0].Source.UserID,
+		message.Events[0].Message.ID,
+		message.Events[0].Message.Type,
+		message.Events[0].Message.Text)
 
 	body := strings.NewReader(s)
 
