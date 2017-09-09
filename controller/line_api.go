@@ -57,7 +57,7 @@ func addString(base *string, text string) {
 
 func returnMessage(message model.MessageText) error {
 	if len(message.Events) == 0 {
-		return errors.New("out of range")
+		return errors.New("nothing event")
 	}
 	event := message.Events[0]
 
@@ -73,7 +73,11 @@ func returnMessage(message model.MessageText) error {
 }
 
 func sendToSlack(message model.MessageText) error {
+	if len(message.Events) == 0 {
+		return errors.New("nothing message")
+	}
 
+	event := message.Events[0]
 	s := fmt.Sprintf(`
 	{ 	"text" : " `+
 		" ``` "+
@@ -87,14 +91,14 @@ iD: %s
 ---Message---
 type: %s
 text: %s`+
-		" ``` "+` "}`, message.Events[0].ReplyToken,
-		message.Events[0].Type,
-		message.Events[0].Timestamp,
-		message.Events[0].Source.Type,
-		message.Events[0].Source.UserID,
-		message.Events[0].Message.ID,
-		message.Events[0].Message.Type,
-		message.Events[0].Message.Text)
+		" ``` "+` "}`, event.ReplyToken,
+		event.Type,
+		event.Timestamp,
+		event.Source.Type,
+		event.Source.UserID,
+		event.Message.ID,
+		event.Message.Type,
+		event.Message.Text)
 
 	body := strings.NewReader(s)
 
