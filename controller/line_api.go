@@ -43,6 +43,8 @@ func CallbackHandler(c *gin.Context) {
 		addString(&resp, err.Error())
 	}
 
+	log.Println("RESP::", resp)
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": resp,
 	})
