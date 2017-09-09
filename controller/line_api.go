@@ -11,8 +11,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/linebot"
-	"github.com/shimokp/takizawa-garbage-bot/manager"
 	"github.com/shimokp/takizawa-garbage-bot/manager/config"
+	"github.com/shimokp/takizawa-garbage-bot/manager/garbage"
 	"github.com/shimokp/takizawa-garbage-bot/model"
 )
 
@@ -76,9 +76,9 @@ func replyMessage(event model.Event) error {
 func switchMessage(event model.Event) string {
 	switch event.Message.Text {
 	case "今日":
-		return manager.GetMessage(model.Today, model.A)
+		return garbage.GetMessage(model.Today, model.A)
 	case "明日":
-		return manager.GetMessage(model.Tomorrow, model.A)
+		return garbage.GetMessage(model.Tomorrow, model.A)
 	}
 
 	return ""
