@@ -27,7 +27,7 @@ func CallbackHandler(c *gin.Context) {
 	var message = model.MessageText{}
 	err := json.Unmarshal(bufBody.Bytes(), &message)
 	if err != nil {
-		log.Println(err)
+		log.Println("UnmarshalError::", err)
 		addString(&resp, err.Error())
 	}
 
@@ -37,14 +37,16 @@ func CallbackHandler(c *gin.Context) {
 
 		err = sendToSlack(event)
 		if err != nil {
-			log.Println(err)
+			log.Println("SendToSlackError::", err)
 			addString(&resp, err.Error())
 		}
 
-		err = replyMessage(event)
-		if err != nil {
-			log.Println(err)
-			addString(&resp, err.Error())
+		if event.Message.Text != "" {
+			err = replyMessage(event)
+			if err != nil {
+				log.Println("ReplyMessageError::", err)
+				addString(&resp, err.Error())
+			}
 		}
 	}
 
