@@ -16,7 +16,7 @@ func InsertUser(db *sql.DB, userId string, region Region) error {
 }
 
 func GetUserByUserId(db *sql.DB, userId string) (User, error) {
-	q := `select * from users where user_id='?''`
+	q := `select * from users where user_id='?'`
 	var user User
 	//TODO: Regionはstring? int?
 	err := db.QueryRow(q, userId).Scan(&user.ID, &user.UserID, &user.Region)
