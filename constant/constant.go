@@ -19,6 +19,22 @@ const MESSAGE_PREFFIX_TODAY = "今日は"
 const MESSAGE_PREFFIX_TOMORROW = "明日は"
 const MESSAGE_SUFFIX = "の日です。"
 
+const MESSAGE_FIRST_RESPONSE = `友達追加ありがとうございます！
+	まず初めにあなたの地区を登録してください。
+	[A]
+	小岩井、大釜上、大釜南、 篠木、大沢、姥屋敷
+	元村南、元村中央、元村東、
+	元村西、元村北、法誓寺、
+	国分、あすみ野、室小路
+	柳沢、南一本木、北一本木、
+	いずみ巣子ニュータウン
+	[B]
+	鵜飼中央、滝沢パークタウン、上の山、
+	上鵜飼、鵜飼南、鵜飼温泉、 滝沢ニュータウン
+	巣子、南巣子、長根、川前
+
+	このメッセージにAまたはBと返信してください。`
+
 var BiweeklyTuesdayStartGarbageForA = model.Medium
 var BiweeklyTuesdaySecondGarbageForA = model.News
 var BiweeklyFridayStartGarbageForA = model.PET

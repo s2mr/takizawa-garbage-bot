@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/pkg/errors"
+	"github.com/shimokp/takizawa-garbage-bot/constant"
 	"github.com/shimokp/takizawa-garbage-bot/manager/config"
 	"github.com/shimokp/takizawa-garbage-bot/manager/garbage"
 	"github.com/shimokp/takizawa-garbage-bot/model"
@@ -81,6 +82,11 @@ func replyMessage(event model.Event) error {
 var users []model.User
 
 func switchMessage(event model.Event) string {
+
+	if event.Type == "follow" {
+		return constant.MESSAGE_FIRST_RESPONSE
+	}
+
 	switch event.Message.Text {
 	case "今日":
 		var region model.Region
