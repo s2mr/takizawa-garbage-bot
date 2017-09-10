@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 
+	_ "github.com/lib/pq"
 	"github.com/shimokp/takizawa-garbage-bot/manager/config"
 )
 
