@@ -48,6 +48,8 @@ func CallbackHandler(c *gin.Context) {
 			if err != nil {
 				log.Println("ReplyMessageError::", err)
 				addString(&resp, err.Error())
+			} else {
+				log.Println("Reply Send!")
 			}
 		}
 	}
