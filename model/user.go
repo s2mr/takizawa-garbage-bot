@@ -2,10 +2,12 @@ package model
 
 import (
 	"database/sql"
+	"log"
 )
 
 // 全て値があるときに利用する
 func InsertUser(db *sql.DB, userId string, region Region) error {
+	log.Println("InsertUser::", " userId: ", userId, " region: ", region)
 	q := `insert into users (user_id, region) values ('?',?)`
 	_, err := db.Exec(q, userId, region)
 	if err != nil {
@@ -16,6 +18,7 @@ func InsertUser(db *sql.DB, userId string, region Region) error {
 }
 
 func GetUserByUserId(db *sql.DB, userId string) (User, error) {
+	log.Println("GettUser::", " userId: ", userId)
 	q := `select * from users where user_id='?'`
 	var user User
 	//TODO: Regionはstring? int?
