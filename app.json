@@ -1,0 +1,21 @@
+{
+  "name": "takizawa-garbage-bot",
+  "scripts": {
+    "postdeploy": "go test -v ./..."
+  },
+  "env": {
+    "SlackToMe": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/go"
+    }
+  ]
+}
