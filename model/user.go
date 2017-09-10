@@ -2,13 +2,12 @@ package model
 
 import (
 	"database/sql"
-	"os/user"
 )
 
 // 全て値があるときに利用する
 func InsertUser(db *sql.DB, userId string, region Region) error {
 	q := `insert into users (user_id, region) values (?,?)`
-	_, err := db.Exec(q, user.Current(), region)
+	_, err := db.Exec(q, userId, region)
 	if err != nil {
 		return err
 	}
