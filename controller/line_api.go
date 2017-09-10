@@ -43,15 +43,14 @@ func CallbackHandler(c *gin.Context) {
 			addString(&resp, err.Error())
 		}
 
-		if event.Message.Text != "" {
-			err = replyMessage(event)
-			if err != nil {
-				log.Println("ReplyMessageError::", err)
-				addString(&resp, err.Error())
-			} else {
-				log.Println("Reply Send!")
-			}
+		err = replyMessage(event)
+		if err != nil {
+			log.Println("ReplyMessageError::", err)
+			addString(&resp, err.Error())
+		} else {
+			log.Println("Reply Send!")
 		}
+
 	}
 
 	c.JSON(http.StatusOK, gin.H{
