@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/linebot"
+	"github.com/pkg/errors"
 	"github.com/shimokp/takizawa-garbage-bot/manager/config"
 	"github.com/shimokp/takizawa-garbage-bot/manager/garbage"
 	"github.com/shimokp/takizawa-garbage-bot/model"
@@ -63,6 +64,10 @@ func addString(base *string, text string) {
 
 func replyMessage(event model.Event) error {
 	sendMessage := switchMessage(event)
+
+	if sendMessage == "" {
+		return errors.New("sendMessage is empty")
+	}
 
 	bot, err := linebot.New(config.GetInstance().TGB_CHANNEL_SECRET, config.GetInstance().TGB_CHANNEL_ACCESS_TOKEN)
 	if err != nil {
