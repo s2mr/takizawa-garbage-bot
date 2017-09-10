@@ -57,3 +57,9 @@ type Event struct {
 		Text string `json:"text"`
 	} `json:"message"`
 }
+
+type User struct {
+	ID     int64
+	UserID string
+	Region Region
+}

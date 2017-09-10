@@ -51,8 +51,6 @@ func CallbackHandler(c *gin.Context) {
 		}
 	}
 
-	log.Println("RESP::", resp)
-
 	c.JSON(http.StatusOK, gin.H{
 		"message": resp,
 	})
@@ -80,15 +78,49 @@ func replyMessage(event model.Event) error {
 	return nil
 }
 
+var users []model.User
+
 func switchMessage(event model.Event) string {
 	switch event.Message.Text {
 	case "今日":
-		return garbage.GetMessage(model.Today, model.A)
+		var region model.Region
+		for i := 0; i < len(users); i++ {
+			if users[i].UserID == event.Source.UserID {
+				region = users[i].Region
+			}
+		}
+
+		return garbage.GetMessage(model.Today, region)
 	case "明日":
-		return garbage.GetMessage(model.Tomorrow, model.A)
+		var region model.Region
+		for i := 0; i < len(users); i++ {
+			if users[i].UserID == event.Source.UserID {
+				region = users[i].Region
+			}
+		}
+
+		return garbage.GetMessage(model.Tomorrow, region)
+	case "A":
+		return registerUser(event.Source.UserID, model.A)
+	case "B":
+		return registerUser(event.Source.UserID, model.B)
 	}
 
 	return ""
+}
+
+func registerUser(userID string, region model.Region) string {
+
+	for i := 0; i < len(users); i++ {
+		if users[i].UserID == userID {
+			return "既に登録されています"
+		}
+	}
+
+	user := model.User{1, userID, region}
+	users = append(users, user)
+
+	return "登録しました"
 }
 
 func sendToSlack(event model.Event) error {
