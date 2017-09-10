@@ -10,6 +10,7 @@ type configManager struct {
 	TGB_CHANNEL_SECRET       string
 	TGB_CHANNEL_ACCESS_TOKEN string
 	TGB_USER_ID              string
+	DATABASE_URL             string
 }
 
 var sharedInstance *configManager = newConfigManager()
@@ -19,6 +20,7 @@ func newConfigManager() *configManager {
 	cs := os.Getenv("TGB_CHANNEL_SECRET")
 	cat := os.Getenv("TGB_CHANNEL_ACCESS_TOKEN")
 	ui := os.Getenv("TGB_USER_ID")
+	durl := os.Getenv("DATABASE_URL")
 
 	//FIXME: sliceを使わなくてもいいようにしたい
 	slice := []string{port, cs, cat, ui}
@@ -28,7 +30,7 @@ func newConfigManager() *configManager {
 		}
 	}
 
-	return &configManager{port, cs, cat, ui}
+	return &configManager{port, cs, cat, ui, durl}
 }
 
 func GetInstance() *configManager {

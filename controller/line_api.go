@@ -9,11 +9,14 @@ import (
 	"os"
 	"strings"
 
+	"database/sql"
+
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/pkg/errors"
 	"github.com/shimokp/takizawa-garbage-bot/constant"
 	"github.com/shimokp/takizawa-garbage-bot/manager/config"
+	"github.com/shimokp/takizawa-garbage-bot/manager/database"
 	"github.com/shimokp/takizawa-garbage-bot/manager/garbage"
 	"github.com/shimokp/takizawa-garbage-bot/model"
 )
@@ -88,25 +91,23 @@ func switchMessage(event model.Event) string {
 		return constant.MESSAGE_FIRST_RESPONSE
 	}
 
+	user, err := model.GetUserByUserId(database.GetInstance().DB, event.Source.UserID)
+	if err != nil {
+		switch err {
+		case sql.ErrNoRows:
+			//FIXME: use const
+			return "地区が登録されていません"
+		default:
+			log.Println(err)
+			return "エラーが発生しました"
+		}
+	}
+
 	switch event.Message.Text {
 	case "今日":
-		var region model.Region
-		for i := 0; i < len(users); i++ {
-			if users[i].UserID == event.Source.UserID {
-				region = users[i].Region
-			}
-		}
-
-		return garbage.GetMessage(model.Today, region)
+		return garbage.GetMessage(model.Today, user.Region)
 	case "明日":
-		var region model.Region
-		for i := 0; i < len(users); i++ {
-			if users[i].UserID == event.Source.UserID {
-				region = users[i].Region
-			}
-		}
-
-		return garbage.GetMessage(model.Tomorrow, region)
+		return garbage.GetMessage(model.Tomorrow, user.Region)
 	case "A":
 		return registerUser(event.Source.UserID, model.A)
 	case "B":
@@ -117,16 +118,13 @@ func switchMessage(event model.Event) string {
 }
 
 func registerUser(userID string, region model.Region) string {
+	//TODO:もし既に登録されている場合は更新する
 
-	for i := 0; i < len(users); i++ {
-		if users[i].UserID == userID {
-			return "既に登録されています"
-		}
+	err := model.InsertUser(database.GetInstance().DB, userID, region)
+	if err != nil {
+		log.Println(err)
+		return "エラーが発生しました"
 	}
-
-	user := model.User{1, userID, region}
-	users = append(users, user)
-
 	return "登録しました"
 }
 
