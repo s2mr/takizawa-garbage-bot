@@ -82,19 +82,17 @@ func replyMessage(event model.Event) error {
 }
 
 func switchMessage(event model.Event) string {
-
 	if event.Type == "follow" {
 		return constant.MESSAGE_FIRST_RESPONSE
 	}
 
+	text := event.Message.Text
+
 	isExists, _ := model.IsUserExists(database.GetInstance().DB, event.Source.UserID)
 	if !isExists {
 		/*ユーザが存在しない場合*/
-		switch event.Message.Text {
-		case "A":
-			return registerUser(event.Source.UserID, model.A)
-		case "B":
-			return registerUser(event.Source.UserID, model.B)
+		if text == "A" || text == "B" {
+			return registerUser(event.Source.UserID, model.ConvertStringToRegion(text))
 		}
 	}
 
@@ -104,7 +102,6 @@ func switchMessage(event model.Event) string {
 		return "ユーザ取得時にエラーが発生しました"
 	}
 
-	text := event.Message.Text
 	switch text {
 	case "今日":
 		return garbage.GetMessage(model.Today, user.Region)
@@ -125,7 +122,7 @@ func registerUser(userId string, region model.Region) string {
 		log.Println(err)
 		return "地区設定時にエラーが発生しました"
 	}
-	return "地区を" + model.ConvertRegionToString(region) + "に設定しました"
+	return "地区を" + model.ConvertRegionToString(region) + "に設定しました\n\n" + constant.MESSAGE_COMMAND_INSTRUCTION
 }
 
 func updateUser(userId string, region model.Region) string {

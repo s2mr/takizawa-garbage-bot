@@ -27,6 +27,13 @@ const MESSAGE_FIRST_RESPONSE = `友達追加ありがとうございます！
 鵜飼中央、滝沢パークタウン、上の山、上鵜飼、鵜飼南、鵜飼温泉、 滝沢ニュータウン、巣子、南巣子、長根、川前
 
 このメッセージにAまたはBと返信してください。`
+const MESSAGE_COMMAND_INSTRUCTION = `以下のコマンドが利用できます。
+[今日]=>今日のゴミ収集情報をお伝えします。
+[明日]=>明日のゴミ収集情報をお伝えします。
+[A]=>地区をAに変更します。
+[B]=>地区をBに変更します。
+コマンドの利用は[]内の文字のみをご入力ください。
+それでは良いごみLIFEを。`
 
 var BiweeklyTuesdayStartGarbageForA = model.Medium
 var BiweeklyTuesdaySecondGarbageForA = model.News
