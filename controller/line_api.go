@@ -60,9 +60,12 @@ func CallbackHandler(c *gin.Context) {
 }
 
 func MultiHandler(c *gin.Context) {
-	log.Println("CALL!")
-	res := sendMessage(model.A, model.Tomorrow)
+	regionStr, _ := c.GetPostForm("region")
+	dateTypeStr, _ := c.GetPostForm("dateType")
 
+	log.Println(regionStr, dateTypeStr)
+
+	res := sendMessage(model.ConvertStringToRegion(regionStr), model.ConvertStringToDateType(dateTypeStr))
 	c.JSON(http.StatusOK, gin.H{
 		"message": res,
 	})

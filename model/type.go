@@ -86,3 +86,12 @@ func ConvertRegionToString(region Region) string {
 		return "B"
 	}
 }
+
+func ConvertStringToDateType(dateType string) DateType {
+	switch dateType {
+	case "today":
+		return Today
+	default:
+		return Tomorrow
+	}
+}
