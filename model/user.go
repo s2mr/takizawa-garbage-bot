@@ -35,7 +35,7 @@ func GetUserByUserId(db *sql.DB, userId string) (User, error) {
 	}
 
 	//TODO: Regionはstring? int?
-	err = stmt.QueryRow(userId).Scan(&user.ID, &user.UserID, &user.Region)
+	err = stmt.QueryRow(userId).Scan(&user.ID, &user.UserID, &user.Region, &user.Created)
 	if err != nil {
 		return user, err
 	}

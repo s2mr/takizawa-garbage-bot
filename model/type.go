@@ -1,5 +1,10 @@
 package model
 
+import (
+	"github.com/golang/protobuf/ptypes/timestamp"
+	"time"
+)
+
 //指定日時
 type DateType int
 
@@ -62,4 +67,5 @@ type User struct {
 	ID     int64
 	UserID string
 	Region Region
+	Created time.Time
 }
