@@ -101,6 +101,7 @@ func switchMessage(event model.Event) string {
 
 	user, err := model.GetUserByUserId(database.GetInstance().DB, event.Source.UserID)
 	if err != nil {
+		log.Println(err)
 		return "エラーが発生しました"
 	}
 
