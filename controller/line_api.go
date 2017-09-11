@@ -81,8 +81,6 @@ func replyMessage(event model.Event) error {
 	return nil
 }
 
-var users []model.User
-
 func switchMessage(event model.Event) string {
 
 	if event.Type == "follow" {
@@ -91,6 +89,7 @@ func switchMessage(event model.Event) string {
 
 	isExists, _ := model.IsUserExists(database.GetInstance().DB, event.Source.UserID)
 	if !isExists {
+		/*ユーザが存在しない場合*/
 		switch event.Message.Text {
 		case "A":
 			return registerUser(event.Source.UserID, model.A)
@@ -102,28 +101,41 @@ func switchMessage(event model.Event) string {
 	user, err := model.GetUserByUserId(database.GetInstance().DB, event.Source.UserID)
 	if err != nil {
 		log.Println(err)
-		return "エラーが発生しました"
+		return "ユーザ取得時にエラーが発生しました"
 	}
 
-	switch event.Message.Text {
+	text := event.Message.Text
+	switch text {
 	case "今日":
 		return garbage.GetMessage(model.Today, user.Region)
 	case "明日":
 		return garbage.GetMessage(model.Tomorrow, user.Region)
 	}
 
+	if text == "A" || text == "B" {
+		return updateUser(user.UserID, model.ConvertStringToRegion(text))
+	}
+
 	return ""
 }
 
-func registerUser(userID string, region model.Region) string {
-	//TODO:もし既に登録されている場合は更新する
-
-	err := model.InsertUser(database.GetInstance().DB, userID, region)
+func registerUser(userId string, region model.Region) string {
+	err := model.InsertUser(database.GetInstance().DB, userId, region)
 	if err != nil {
 		log.Println(err)
-		return "エラーです"
+		return "地区設定時にエラーが発生しました"
 	}
-	return "登録しました"
+	return "地区を" + model.ConvertRegionToString(region) + "に設定しました"
+}
+
+func updateUser(userId string, region model.Region) string {
+	err := model.UpdateUser(database.GetInstance().DB, userId, region)
+	if err != nil {
+		log.Println(err)
+		return "更新時にエラーが発生しました"
+	}
+
+	return "地区を" + model.ConvertRegionToString(region) + "に変更しました"
 }
 
 func sendToSlack(event model.Event) error {

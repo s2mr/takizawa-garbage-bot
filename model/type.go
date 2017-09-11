@@ -68,3 +68,21 @@ type User struct {
 	Region  Region
 	Created time.Time
 }
+
+func ConvertStringToRegion(region string) Region {
+	switch region {
+	case "A":
+		return A
+	default:
+		return B
+	}
+}
+
+func ConvertRegionToString(region Region) string {
+	switch region {
+	case A:
+		return "A"
+	default:
+		return "B"
+	}
+}

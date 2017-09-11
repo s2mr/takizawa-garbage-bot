@@ -2,12 +2,10 @@ package model
 
 import (
 	"database/sql"
-	"log"
 )
 
 // 全て値があるときに利用する
 func InsertUser(db *sql.DB, userId string, region Region) error {
-	log.Println("InsertUser::", " userId: ", userId, " region: ", region)
 	q := `insert into users (user_id, region) values ($1,$2)`
 
 	stmt, err := db.Prepare(q)
@@ -16,15 +14,10 @@ func InsertUser(db *sql.DB, userId string, region Region) error {
 	}
 
 	_, err = stmt.Exec(userId, region)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func GetUserByUserId(db *sql.DB, userId string) (User, error) {
-	log.Println("GettUser::", " userId: ", userId)
 	q := `select * from users where user_id=$1`
 
 	var user User
@@ -34,13 +27,20 @@ func GetUserByUserId(db *sql.DB, userId string) (User, error) {
 		return user, err
 	}
 
-	//TODO: Regionはstring? int?
 	err = stmt.QueryRow(userId).Scan(&user.ID, &user.UserID, &user.Region, &user.Created)
+
+	return user, err
+}
+
+func UpdateUser(db *sql.DB, userId string, region Region) error {
+	q := `update users set region=$1 where user_id=$2`
+	stmt, err := db.Prepare(q)
 	if err != nil {
-		return user, err
+		return err
 	}
 
-	return user, nil
+	_, err = stmt.Exec(region, userId)
+	return err
 }
 
 func IsUserExists(db *sql.DB, userId string) (bool, error) {
