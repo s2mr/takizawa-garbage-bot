@@ -15,7 +15,7 @@ func InsertUser(db *sql.DB, userId string, region Region) error {
 		return err
 	}
 
-	_, err = stmt.Exec(q, userId, region)
+	_, err = stmt.Exec(userId, region)
 	if err != nil {
 		return err
 	}
@@ -35,7 +35,7 @@ func GetUserByUserId(db *sql.DB, userId string) (User, error) {
 	}
 
 	//TODO: Regionはstring? int?
-	err = stmt.QueryRow(q, userId).Scan(&user.ID, &user.UserID, &user.Region)
+	err = stmt.QueryRow(userId).Scan(&user.ID, &user.UserID, &user.Region)
 	if err != nil {
 		return user, err
 	}
