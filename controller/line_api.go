@@ -154,6 +154,9 @@ func sendMessage(region model.Region, dateType model.DateType) error {
 		return err
 	}
 	ids := model.GetUserIdsFromUsers(users)
+	if len(ids) == 0 {
+		return errors.New("user to send is empty")
+	}
 	bot, err := linebot.New(config.GetInstance().TGB_CHANNEL_SECRET, config.GetInstance().TGB_CHANNEL_ACCESS_TOKEN)
 	if err != nil {
 		log.Println(err)
