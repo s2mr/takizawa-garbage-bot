@@ -9,8 +9,6 @@ import (
 	"os"
 	"strings"
 
-	"database/sql"
-
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/pkg/errors"
@@ -91,16 +89,19 @@ func switchMessage(event model.Event) string {
 		return constant.MESSAGE_FIRST_RESPONSE
 	}
 
+	isExists, _ := model.IsUserExists(database.GetInstance().DB, event.Source.UserID)
+	if !isExists {
+		switch event.Message.Text {
+		case "A":
+			return registerUser(event.Source.UserID, model.A)
+		case "B":
+			return registerUser(event.Source.UserID, model.B)
+		}
+	}
+
 	user, err := model.GetUserByUserId(database.GetInstance().DB, event.Source.UserID)
 	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
-			//FIXME: use const
-			return "地区が登録されていません"
-		default:
-			log.Println(err)
-			return "エラーが発生しました"
-		}
+		return "エラーが発生しました"
 	}
 
 	switch event.Message.Text {
@@ -108,11 +109,6 @@ func switchMessage(event model.Event) string {
 		return garbage.GetMessage(model.Today, user.Region)
 	case "明日":
 		return garbage.GetMessage(model.Tomorrow, user.Region)
-	case "A":
-		//TODO: ユーザが登録されてるかどうかを判定
-		return registerUser(event.Source.UserID, model.A)
-	case "B":
-		return registerUser(event.Source.UserID, model.B)
 	}
 
 	return ""
