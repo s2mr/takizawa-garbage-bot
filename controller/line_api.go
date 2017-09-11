@@ -109,6 +109,7 @@ func switchMessage(event model.Event) string {
 	case "明日":
 		return garbage.GetMessage(model.Tomorrow, user.Region)
 	case "A":
+		//TODO: ユーザが登録されてるかどうかを判定
 		return registerUser(event.Source.UserID, model.A)
 	case "B":
 		return registerUser(event.Source.UserID, model.B)
