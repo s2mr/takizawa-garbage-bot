@@ -65,7 +65,7 @@ func MultiHandler(c *gin.Context) {
 
 	log.Println(regionStr, dateTypeStr)
 
-	res := sendMessage(model.ConvertStringToRegion(regionStr), model.ConvertStringToDateType(dateTypeStr))
+	res := sendMessage(model.ConvertStringToRegion(regionStr), model.ConvertStringToDateType(dateTypeStr)).Error()
 	c.JSON(http.StatusOK, gin.H{
 		"message": res,
 	})
