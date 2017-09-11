@@ -59,6 +59,15 @@ func CallbackHandler(c *gin.Context) {
 	})
 }
 
+func MultiHandler(c *gin.Context) {
+	log.Println("CALL!")
+	res := sendMessage(model.A, model.Tomorrow)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": res,
+	})
+}
+
 func addString(base *string, text string) {
 	*base = *base + "\n" + text
 }
@@ -133,6 +142,26 @@ func updateUser(userId string, region model.Region) string {
 	}
 
 	return "地区を" + model.ConvertRegionToString(region) + "に変更しました"
+}
+
+func sendMessage(region model.Region, dateType model.DateType) error {
+	users, err := model.GetUsersByRegion(database.GetInstance().DB, region)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	ids := model.GetUserIdsFromUsers(users)
+	bot, err := linebot.New(config.GetInstance().TGB_CHANNEL_SECRET, config.GetInstance().TGB_CHANNEL_ACCESS_TOKEN)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	str := garbage.GetMessage(dateType, region)
+	if _, err := bot.Multicast(ids, linebot.NewTextMessage(str)).Do(); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
 
 func sendToSlack(event model.Event) error {

@@ -32,6 +32,26 @@ func GetUserByUserId(db *sql.DB, userId string) (User, error) {
 	return user, err
 }
 
+func GetUsersByRegion(db *sql.DB, region Region) ([]User, error) {
+	q := `select * from users where region=$1`
+
+	stmt, err := db.Prepare(q)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := stmt.Query(region)
+	if err != nil {
+		return nil, err
+	}
+
+	users, err := ScanUsers(rows)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
 func UpdateUser(db *sql.DB, userId string, region Region) error {
 	q := `update users set region=$1 where user_id=$2`
 	stmt, err := db.Prepare(q)
@@ -54,4 +74,12 @@ func IsUserExists(db *sql.DB, userId string) (bool, error) {
 	var count int64
 	err = stmt.QueryRow(userId).Scan(&count)
 	return count == 1, nil
+}
+
+func GetUserIdsFromUsers(users []User) []string {
+	var ids []string
+	for i:=0; i<len(users); i++ {
+		ids = append(ids, users[i].UserID)
+	}
+	return ids
 }
