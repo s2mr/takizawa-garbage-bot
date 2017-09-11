@@ -123,7 +123,7 @@ func registerUser(userID string, region model.Region) string {
 	err := model.InsertUser(database.GetInstance().DB, userID, region)
 	if err != nil {
 		log.Println(err)
-		return "エラーが発生しました"
+		return "エラーです"
 	}
 	return "登録しました"
 }
