@@ -43,7 +43,7 @@ func GetUserByUserId(db *sql.DB, userId string) (User, error) {
 	return user, nil
 }
 
-func IsUserExists(db *sql.DB, userId string)(bool, error) {
+func IsUserExists(db *sql.DB, userId string) (bool, error) {
 	q := `select count(*) from users where user_id=$1`
 
 	stmt, err := db.Prepare(q)
@@ -53,5 +53,5 @@ func IsUserExists(db *sql.DB, userId string)(bool, error) {
 
 	var count int64
 	err = stmt.QueryRow(userId).Scan(&count)
-	return count==1, nil
+	return count == 1, nil
 }

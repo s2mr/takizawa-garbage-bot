@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/golang/protobuf/ptypes/timestamp"
 	"time"
 )
 
@@ -64,8 +63,8 @@ type Event struct {
 }
 
 type User struct {
-	ID     int64
-	UserID string
-	Region Region
+	ID      int64
+	UserID  string
+	Region  Region
 	Created time.Time
 }
