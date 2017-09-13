@@ -182,23 +182,10 @@ func sendToSlack(event model.Event) error {
 	s := fmt.Sprintf(`
 	{ 	"text" : " `+
 		" ``` "+
-		`replyToken: %s
-type: %s
-timeStamp: %s
----Source---
-type: %s
-userId: %s
-iD: %s
----Message---
-type: %s
+		`userId: %s
 text: %s`+
-		" ``` "+` "}`, event.ReplyToken,
-		event.Type,
-		event.Timestamp,
-		event.Source.Type,
+		" ``` "+` "}`,
 		event.Source.UserID,
-		event.Message.ID,
-		event.Message.Type,
 		event.Message.Text)
 
 	body := strings.NewReader(s)
