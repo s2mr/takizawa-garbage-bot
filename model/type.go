@@ -62,6 +62,13 @@ type Event struct {
 	} `json:"message"`
 }
 
+type Profile struct {
+	DisplayName   string `json:"displayName"`
+	UserID        string `json:"userId"`
+	PictureURL    string `json:"pictureUrl"`
+	StatusMessage string `json:"statusMessage"`
+}
+
 type User struct {
 	ID      int64
 	UserID  string

@@ -178,15 +178,42 @@ func sendMessage(region model.Region, dateType model.DateType) error {
 	return nil
 }
 
+func getProfile(userId string) (model.Profile, error) {
+
+	var profile model.Profile
+
+	bot, err := linebot.New(config.GetInstance().TGB_CHANNEL_SECRET, config.GetInstance().TGB_CHANNEL_ACCESS_TOKEN)
+	if err != nil {
+		log.Println(err)
+		return profile, err
+	}
+	res, err := bot.GetProfile(userId).Do()
+	if err != nil {
+		log.Println(err)
+		return profile, err
+	}
+
+	profile.DisplayName = res.DisplayName
+	profile.PictureURL = res.PictureURL
+	profile.StatusMessage = res.StatusMessage
+
+	return profile, nil
+}
+
 func sendToSlack(event model.Event) error {
+	prof, err := getProfile(event.Source.UserID)
+	if err != nil {
+		return err
+	}
+
 	s := fmt.Sprintf(`
-	{ 	"text" : " `+
-		" ``` "+
-		`userId: %s
-text: %s`+
-		" ``` "+` "}`,
-		event.Source.UserID,
-		event.Message.Text)
+	{ 	"text" : "name: %s
+picture: %s
+status: %s
+ "}`,
+		prof.DisplayName,
+		prof.PictureURL,
+		prof.StatusMessage)
 
 	body := strings.NewReader(s)
 
