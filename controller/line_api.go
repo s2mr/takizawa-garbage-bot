@@ -210,10 +210,12 @@ func sendToSlack(event model.Event) error {
 	{ 	"text" : "name: %s
 picture: %s
 status: %s
+text; %s
  "}`,
 		prof.DisplayName,
 		prof.PictureURL,
-		prof.StatusMessage)
+		prof.StatusMessage,
+		event.Message.Text)
 
 	body := strings.NewReader(s)
 
