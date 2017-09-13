@@ -119,7 +119,7 @@ func switchMessage(event model.Event) string {
 	user, err := model.GetUserByUserId(database.GetInstance().DB, event.Source.UserID)
 	if err != nil {
 		log.Println(err)
-		return "ユーザ取得時にエラーが発生しました"
+		return "ユーザ取得時にエラーが発生しました。"
 	}
 
 	switch text {
@@ -140,19 +140,19 @@ func registerUser(userId string, region model.Region) string {
 	err := model.InsertUser(database.GetInstance().DB, userId, region)
 	if err != nil {
 		log.Println(err)
-		return "地区設定時にエラーが発生しました"
+		return "地区設定時にエラーが発生しました。"
 	}
-	return "地区を" + model.ConvertRegionToString(region) + "に設定しました\n\n" + constant.MESSAGE_COMMAND_INSTRUCTION
+	return "地区を" + model.ConvertRegionToString(region) + "に設定しました。\n\n" + constant.MESSAGE_COMMAND_INSTRUCTION
 }
 
 func updateUser(userId string, region model.Region) string {
 	err := model.UpdateUser(database.GetInstance().DB, userId, region)
 	if err != nil {
 		log.Println(err)
-		return "更新時にエラーが発生しました"
+		return "更新時にエラーが発生しました。"
 	}
 
-	return "地区を" + model.ConvertRegionToString(region) + "に変更しました"
+	return "地区を" + model.ConvertRegionToString(region) + "に変更しました。"
 }
 
 func sendMessage(region model.Region, dateType model.DateType) error {
