@@ -34,10 +34,11 @@ const MESSAGE_COMMAND_INSTRUCTION = `以下のコマンドが利用できます�
 [B]=>地区をBに変更します。
 コマンドの利用は[]内の文字のみをご入力ください
 
-また、１日２回（朝7:00~8:00, 夜19:00~20:00）今日または明日のゴミ収集情報を配信します。
+また、１日２回（朝は7:00~8:00, 夜は19:00~20:00）今日または明日のゴミ収集情報を配信します。
 それでは良いごみLIFEを。`
 const MESSAGE_COMMAND_NOTFOUND = `そのコマンドは存在しません。打ち間違えがないかお確かめください。
 尚、英字は半角のみの入力ができます。`
+
 var BiweeklyTuesdayStartGarbageForA = model.Medium
 var BiweeklyTuesdaySecondGarbageForA = model.News
 var BiweeklyFridayStartGarbageForA = model.PET
