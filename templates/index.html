@@ -10,13 +10,29 @@
     <div class="container">
         <div style="height: 300px"></div>
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="text-center">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h1 class="panel-title">安心してください</h1>
-                        </div>
-                        <div class="pane-body"><h1>サーバ生きてますよ</h1></div>
+            <div class="col-md-8 col-md-offset-2" style="margin: 10px">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">ご要望はこちらまで</h1>
+                    </div>
+                    <div class="pane-body">
+                        <form action="/" method="post">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">ニックネーム</span>
+                                    <input type="text" name="nickname" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">本文</span>
+                                    <input type="text" name="body" class="form-control">
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-default">送信</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

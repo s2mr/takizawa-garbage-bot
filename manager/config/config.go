@@ -23,10 +23,10 @@ func newConfigManager() *configManager {
 	durl := os.Getenv("DATABASE_URL")
 
 	//FIXME: sliceを使わなくてもいいようにしたい
-	slice := []string{port, cs, cat, ui}
+	slice := []string{port, cs, cat, ui, durl}
 	for i := 0; i < len(slice); i++ {
 		if slice[i] == "" {
-			panic("[FATAL]" + reflect.ValueOf(configManager{}).Type().Field(0).Name + " is not assign")
+			panic("[FATAL]" + reflect.ValueOf(configManager{}).Type().Field(i).Name + " is not assign")
 		}
 	}
 

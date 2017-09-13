@@ -23,6 +23,21 @@ func RootHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{})
 }
 
+func PostHandler(c *gin.Context) {
+	nickname, _ := c.GetPostForm("nickname")
+	body, _ := c.GetPostForm("body")
+
+	log.Println(nickname, body)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "ok",
+	})
+}
+
+func CheckHandler(c *gin.Context) {
+	c.HTML(http.StatusOK, "check.html", gin.H{})
+}
+
 func CallbackHandler(c *gin.Context) {
 	var resp = ""
 

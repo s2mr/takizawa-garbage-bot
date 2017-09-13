@@ -11,6 +11,8 @@ func Init() {
 	r.LoadHTMLGlob("templates/*.html")
 
 	r.GET("/", controller.RootHandler)
+	r.POST("/", controller.PostHandler)
+	r.GET("/check", controller.CheckHandler)
 	r.POST("/callback", controller.CallbackHandler)
 	r.POST("/multi", controller.MultiHandler)
 	r.Run(":" + config.GetInstance().PORT) // listen and serve on 0.0.0.0:8080
