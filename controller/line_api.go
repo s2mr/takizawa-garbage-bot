@@ -27,11 +27,12 @@ func PostHandler(c *gin.Context) {
 	nickname, _ := c.GetPostForm("nickname")
 	body, _ := c.GetPostForm("body")
 
-	log.Println(nickname, body)
+	err := sendToSlackForRequest(nickname, body)
+	if err != nil {
+		log.Println(err)
+	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status": "ok",
-	})
+	c.HTML(http.StatusOK, "sent.html", gin.H{})
 }
 
 func CheckHandler(c *gin.Context) {
@@ -57,7 +58,7 @@ func CallbackHandler(c *gin.Context) {
 	if len(message.Events) > 0 {
 		event := message.Events[0]
 
-		err = sendToSlack(event)
+		err = sendToSlackForEvent(event)
 		if err != nil {
 			log.Println("SendToSlackError::", err)
 			addString(&resp, err.Error())
@@ -215,7 +216,18 @@ func getProfile(userId string) (model.Profile, error) {
 	return profile, nil
 }
 
-func sendToSlack(event model.Event) error {
+func sendToSlackForRequest(nickName string, body string) error {
+	s := fmt.Sprintf(`
+	{ "text" : "ご要望を受信しました！
+ニックネーム: %s
+本文: %s"}`,
+		nickName,
+		body)
+
+	return sendToSlack(s)
+}
+
+func sendToSlackForEvent(event model.Event) error {
 	prof, err := getProfile(event.Source.UserID)
 	if err != nil {
 		return err
@@ -223,15 +235,19 @@ func sendToSlack(event model.Event) error {
 
 	s := fmt.Sprintf(`
 	{ 	"text" : "name: %s
-picture: %s
-status: %s
-text; %s
+画像のURL: %s
+ステータス: %s
+本文: %s
  "}`,
 		prof.DisplayName,
 		prof.PictureURL,
 		prof.StatusMessage,
 		event.Message.Text)
 
+	return sendToSlack(s)
+}
+
+func sendToSlack(s string) error {
 	body := strings.NewReader(s)
 
 	url := os.Getenv("SlackToMe")
