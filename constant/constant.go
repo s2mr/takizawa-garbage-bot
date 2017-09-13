@@ -34,7 +34,8 @@ const MESSAGE_COMMAND_INSTRUCTION = `以下のコマンドが利用できます�
 [B]=>地区をBに変更します。
 コマンドの利用は[]内の文字のみをご入力ください。
 それでは良いごみLIFEを。`
-
+const MESSAGE_COMMAND_NOTFOUND = `そのコマンドは存在しません。
+打ち間違えがないかお確かめください。`
 var BiweeklyTuesdayStartGarbageForA = model.Medium
 var BiweeklyTuesdaySecondGarbageForA = model.News
 var BiweeklyFridayStartGarbageForA = model.PET

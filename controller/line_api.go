@@ -129,6 +129,8 @@ func switchMessage(event model.Event) string {
 		/*ユーザが存在しない場合*/
 		if text == "A" || text == "B" {
 			return registerUser(event.Source.UserID, model.ConvertStringToRegion(text))
+		} else {
+			return constant.MESSAGE_COMMAND_NOTFOUND
 		}
 	}
 
@@ -149,7 +151,7 @@ func switchMessage(event model.Event) string {
 		return updateUser(user.UserID, model.ConvertStringToRegion(text))
 	}
 
-	return ""
+	return constant.MESSAGE_COMMAND_NOTFOUND
 }
 
 func registerUser(userId string, region model.Region) string {
