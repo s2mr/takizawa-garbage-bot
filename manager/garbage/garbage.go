@@ -1,6 +1,7 @@
 package garbage
 
 import (
+	"log"
 	"time"
 
 	"github.com/shimokp/takizawa-garbage-bot/constant"
@@ -161,6 +162,12 @@ func getGarbageBiweeklyForB(date time.Time) model.GarbageType {
 	case time.Wednesday:
 		duration := date.Sub(constant.BiweeklyWednesdayStartDateForB)
 		days := int(duration.Hours()) / 24
+
+		if amari := days % 7; amari != 0 {
+			log.Println("エラー::隔週じゃないやつきた")
+			return model.Unknown
+		}
+
 		if days%2 == 0 {
 			//FIXME: 曜日に依存しない変数名
 			return constant.BiweeklyWednesdayStartGarbageForB
@@ -170,6 +177,12 @@ func getGarbageBiweeklyForB(date time.Time) model.GarbageType {
 	case time.Thursday:
 		duration := date.Sub(constant.BiweeklyThursdayStartDateForB)
 		days := int(duration.Hours()) / 24
+
+		if amari := days % 7; amari != 0 {
+			log.Println("エラー::隔週じゃないやつきた")
+			return model.Unknown
+		}
+
 		if days%2 == 0 {
 			return constant.BiweeklyThursdayStartGarbageForB
 		} else {
